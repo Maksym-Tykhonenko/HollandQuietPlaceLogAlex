@@ -417,9 +417,24 @@ const ProductScreen = ({navigation, route}) => {
         //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
       });
       return false;
-    } else if (url.includes('wc:')) {
+    }else if (url.includes('moneybird-app://')) {
       Linking.openURL(url).catch(err => {
         //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+      });
+      return false;
+    }else if (url.includes('buut.deeplink.ideal://payment')) {
+      Linking.openURL(url).catch(err => {
+        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+      });
+      return false;
+    }else if (url.includes('nnretailapp://')) {
+      Linking.openURL(url).catch(err => {
+        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+      });
+      return false;
+    } else if (url.includes('wc:')) {
+      Linking.openURL(url).catch(err => {
+        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');  
       });
       return false;
     } else {
