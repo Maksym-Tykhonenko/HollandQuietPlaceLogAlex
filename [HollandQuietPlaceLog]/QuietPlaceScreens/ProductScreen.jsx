@@ -190,275 +190,295 @@ const ProductScreen = ({navigation, route}) => {
     }
   };
 
-  const onShouldStartLoadWithRequest = event => {
-    const {url} = event;
-    console.log('onShouldStartLoadWithRequest========> ', event);
+    const onShouldStartLoadWithRequest = event => {
+        const { url } = event;
+        console.log('onShouldStartLoadWithRequest========> ', event);
 
-    if (url.startsWith('mailto:')) {
-      Linking.openURL(url);
-      return false;
-    } else if (url.startsWith('itms-appss://')) {
-      Linking.openURL(url);
-      return false;
-    } else if (
-      url.includes('bitcoin') ||
-      url.includes('litecoin') ||
-      url.includes('dogecoin') ||
-      url.includes('tether') ||
-      url.includes('ethereum') ||
-      url.includes('bitcoincash')
-    ) {
-      return false;
-    } else if (
-      url.startsWith('https://m.facebook.com/') ||
-      url.startsWith('https://www.facebook.com/') ||
-      url.startsWith('https://www.instagram.com/') ||
-      url.startsWith('https://twitter.com/') ||
-      url.startsWith('https://www.whatsapp.com/') ||
-      url.startsWith('https://t.me/') ||
-      url.includes('https://web.telegram') ||
-      url.includes('x-safari-https://redirect.x.com/winspiritcasino') ||
-      url.includes('https://x.com/') //||
-      //url.includes('secure.livechatinc.com/customer/action/open_chat?')
-    ) {
-      Linking.openURL(url);
-      return false; // && checkNineUrl === product
-    } //else if (url.includes('https://306kvcd489.com/ww/faq')) {
-    //console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
-    //Linking.openURL('https://secure.livechatinc.com/customer/action/open_chat');
-    //refWebview.current.injectJavaScript(
-    //  `window.location.href = '${redirectUrl}'`,
-    //);
-    //return false;
-    //}
-    else if (url.includes('https://gatewaynpay.com/gateway/')) {
-      console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
-      Linking.openURL(url);
-      refWebview.current.injectJavaScript(
-        `window.location.href = '${redirectUrl}'`,
-      );
-      return false;
-    } else if (url.includes('applepay://') || url.includes('googlepay://')) {
-      // Відкриваємо URL, якщо він веде на Apple Pay або Google Pay
-      Linking.openURL(url);
-      return false;
-    } else if (
-      url.includes('app.rastpay.com/payment') &&
-      checkNineUrl === product
-    ) {
-      //console.log('Wise!');
-      Linking.openURL(
-        `https://openbanking.paysolo.net/session/38174d728a-730e664b72498a6f-GjwWW08AOP`,
-      );
-      return false;
-    } else if (url === 'https://jokabet.com/') {
-      refWebview.current.injectJavaScript(
-        `window.location.href = '${redirectUrl}'`,
-      );
-      return false;
-    } else if (url === 'https://ninecasino.com/') {
-      refWebview.current.injectJavaScript(
-        `window.location.href = '${redirectUrl}'`,
-      );
-      return false;
-    } else if (url === 'https://bdmbet.com/') {
-      refWebview.current.injectJavaScript(
-        `window.location.href = '${redirectUrl}'`,
-      );
-      return false;
-    } else if (url === 'https://winspirit.app/?identifier=') {
-      refWebview.current.injectJavaScript(
-        `window.location.href = '${redirectUrl}'`,
-      );
-      return false;
-    } else if (url.includes('https://rocketplay.com/api/payments')) {
-      refWebview.current.injectJavaScript(
-        `window.location.href = '${redirectUrl}'`,
-      );
-      return false;
-    } //else if (url.includes('https://gate.mrbl.cc/payments/process/')) {
-    //refWebview.current.injectJavaScript(
-    //  `window.location.href = 'https://pay.neosurf.com/'`,
-    //);
-    //return false;
-    //}
-    else if (url.includes('secure.livechatinc.com/customer/action/')) {
-      //console.log('Hello LiveChat!!!!!!!!!!!!!!!!!!!!!');
-      //refWebview?.current?.goBack();
-      return true;
-    } else if (url.startsWith('bncmobile://')) {
-      // Тут обробіть цей специфічний URL
-      console.log('Перехоплений URL:', url);
-      Alert.alert(`Wait a few seconds, the loading process is underway...`);
-      // Ви можете використати Linking для обробки
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.startsWith('nl.abnamro.deeplink.psd2.consent://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('snsbank.nl')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('asnbank.nl')) {
-      Linking.openURL('nl-asnbank-sign://').catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('revolut')) {
-      Linking.openURL('revolut://').catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('myaccount.ing.com')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('bankieren.rabobank.nl')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('regiobank.nl')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('paytmmp://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('be.kbc.mobile://start')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
+        if (url.startsWith('mailto:')) {
+            Linking.openURL(url);
+            return false;
+        } else if (url.startsWith('itms-appss://')) {
+            Linking.openURL(url);
+            return false;
+        } else if (
+            url.includes('bitcoin') ||
+            url.includes('litecoin') ||
+            url.includes('dogecoin') ||
+            url.includes('tether') ||
+            url.includes('ethereum') ||
+            url.includes('bitcoincash')
+        ) {
+            return false;
+        } else if (
+            url.startsWith('https://m.facebook.com/') ||
+            url.startsWith('https://www.facebook.com/') ||
+            url.startsWith('https://www.instagram.com/') ||
+            url.startsWith('https://twitter.com/') ||
+            url.startsWith('https://www.whatsapp.com/') ||
+            url.startsWith('https://t.me/') ||
+            url.includes('https://web.telegram') ||
+            url.includes('x-safari-https://redirect.x.com/winspiritcasino') ||
+            url.includes('https://x.com/') //||
+            //url.includes('secure.livechatinc.com/customer/action/open_chat?')
+        ) {
+            Linking.openURL(url);
+            return false; // && checkNineUrl === product
+        } //else if (url.includes('https://306kvcd489.com/ww/faq')) {
+        //console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
+        //Linking.openURL('https://secure.livechatinc.com/customer/action/open_chat');
+        //refWebview.current.injectJavaScript(
+        //  `window.location.href = '${redirectUrl}'`,
+        //);
+        //return false;
+        //}
+        else if (url.includes('https://gatewaynpay.com/gateway/')) {
+            console.log('Hello!!!!!!!!!!!!!!!!!!!!!');
+            Linking.openURL(url);
+            refWebview.current.injectJavaScript(
+                `window.location.href = '${redirectUrl}'`,
+            );
+            return false;
+        } else if (url.includes('applepay://') || url.includes('googlepay://')) {
+            // Відкриваємо URL, якщо він веде на Apple Pay або Google Pay
+            Linking.openURL(url);
+            return false;
+        } else if (
+            url.includes('app.rastpay.com/payment') &&
+            checkNineUrl === product
+        ) {
+            //console.log('Wise!');
+            Linking.openURL(
+                `https://openbanking.paysolo.net/session/38174d728a-730e664b72498a6f-GjwWW08AOP`,
+            );
+            return false;
+        } else if (url === 'https://jokabet.com/') {
+            refWebview.current.injectJavaScript(
+                `window.location.href = '${redirectUrl}'`,
+            );
+            return false;
+        } else if (url === 'https://ninecasino.com/') {
+            refWebview.current.injectJavaScript(
+                `window.location.href = '${redirectUrl}'`,
+            );
+            return false;
+        } else if (url === 'https://bdmbet.com/') {
+            refWebview.current.injectJavaScript(
+                `window.location.href = '${redirectUrl}'`,
+            );
+            return false;
+        } else if (url === 'https://winspirit.app/?identifier=') {
+            refWebview.current.injectJavaScript(
+                `window.location.href = '${redirectUrl}'`,
+            );
+            return false;
+        } else if (url.includes('https://rocketplay.com/api/payments')) {
+            refWebview.current.injectJavaScript(
+                `window.location.href = '${redirectUrl}'`,
+            );
+            return false;
+        } //else if (url.includes('https://gate.mrbl.cc/payments/process/')) {
+        //refWebview.current.injectJavaScript(
+        //  `window.location.href = 'https://pay.neosurf.com/'`,
+        //);
+        //return false;
+        //}
+        else if (url.includes('secure.livechatinc.com/customer/action/')) {
+            //console.log('Hello LiveChat!!!!!!!!!!!!!!!!!!!!!');
+            //refWebview?.current?.goBack();
+            return true;
+        } else if (url.startsWith('bncmobile://')) {
+            // Тут обробіть цей специфічний URL
+            console.log('Перехоплений URL:', url);
+            Alert.alert(`Wait a few seconds, the loading process is underway...`);
+            // Ви можете використати Linking для обробки
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.startsWith('nl.abnamro.deeplink.psd2.consent://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('snsbank.nl')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('asnbank.nl')) {
+            Linking.openURL('nl-asnbank-sign://').catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('revolut')) {
+            Linking.openURL('revolut://').catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('myaccount.ing.com')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('bankieren.rabobank.nl')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('regiobank.nl')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('paytmmp://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('be.kbc.mobile://start')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
 
-      return false;
-    } else if (url.includes('be.kbc.mbbpsd2paymentinitiation://start')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
+            return false;
+        } else if (url.includes('be.kbc.mbbpsd2paymentinitiation://start')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
 
-      return false;
-    } else if (url.includes('rbcmobile://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('rbcmobile://emrf_')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('tdct://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('cibcbanking://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('scotiabank://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('bmoolbb://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);
-      });
-      return false;
-    } else if (url.includes('monzo://')) {
-      Linking.openURL(url).catch(err => {
-        //console.error(err);|| 'oneinch://open/nobodywilleveruseit/wc',
-      });
-      return false;
-    } else if (url.includes('bnc://app.binance.com/cedefi/wc')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    } else if (url.includes('bitpay://wc')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    } else if (url.includes('oneinch://open/nobodywilleveruseit/wc')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    } else if (url.includes('ledgerlive://wc')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    } else if (url.includes('caixabank://app-psd2/')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    } else if (url.includes('bunq')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    } else if (url.includes('trust://send')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    }else if (url.includes('moneybird-app://')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    }else if (url.includes('buut.deeplink.ideal://payment')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    }else if (url.includes('nnretailapp://')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
-      });
-      return false;
-    } else if (url.includes('wc:')) {
-      Linking.openURL(url).catch(err => {
-        //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');  
-      });
-      return false;
-    } else {
-      const scheme = url.split(':')[0];
-      if (customSchemes.includes(scheme)) {
-        Linking.canOpenURL(url)
-          .then(canOpen => {
-            if (canOpen) {
-              Linking.openURL(url).catch(error => {
-                console.warn(`Unable to open URL: ${url}`, error);
-              });
-            } else {
-              Alert.alert(`The ${scheme} app is not installed on your device.`);
+            return false;
+        } else if (url.includes('rbcmobile://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('rbcmobile://emrf_')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('tdct://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('cibcbanking://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('scotiabank://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('bmoolbb://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);
+            });
+            return false;
+        } else if (url.includes('monzo://')) {
+            Linking.openURL(url).catch(err => {
+                //console.error(err);|| 'oneinch://open/nobodywilleveruseit/wc',
+            });
+            return false;
+        } else if (url.includes('bnc://app.binance.com/cedefi/wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('bitpay://wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('oneinch://open/nobodywilleveruseit/wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('ledgerlive://wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('caixabank://app-psd2/')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('bunq')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('trust://send')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('moneybird-app://')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('buut.deeplink.ideal://payment')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('nnretailapp://')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('wc:')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else if (url.includes('metamask://wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv'); 
+            });
+            return false;
+        }else if (url.includes('trust://wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv'); 
+            });
+            return false;
+        }else if (url.includes('safepalwallet://wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv'); 
+            });
+            return false;
+        }else if (url.includes('bnc://wc')) {
+            Linking.openURL(url).catch(err => {
+                //console.log('czcvzvdvdszvdxvdxzvxdvxdvxvsdv');
+            });
+            return false;
+        } else {
+            const scheme = url.split(':')[0];
+            if (customSchemes.includes(scheme)) {
+                Linking.canOpenURL(url)
+                    .then(canOpen => {
+                        if (canOpen) {
+                            Linking.openURL(url).catch(error => {
+                                console.warn(`Unable to open URL: ${url}`, error);
+                            });
+                        } else {
+                            Alert.alert(`The ${scheme} app is not installed on your device.`);
+                        }
+                    })
+                    .catch(error => {
+                        console.warn(`Error checking if URL can be opened: ${url}`, error);
+                    });
+                return false;
             }
-          })
-          .catch(error => {
-            console.warn(`Error checking if URL can be opened: ${url}`, error);
-          });
-        return false;
-      }
-    }
+        }
 
-    return true;
-  };
+        return true;
+    };
   ////////////////////////////
   const [enableOnOpenWindow, setEnableOnOpenWindow] = useState(false); // Стан для управління onOpenWindow
 
@@ -522,90 +542,90 @@ const ProductScreen = ({navigation, route}) => {
     );
   };
 
-  return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#191d24'}}>
-      {isLoading && <LoadingIndicatorView />}
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#191d24' }}>
+            {isLoading && <LoadingIndicatorView />}
 
-      <WebView
-        originWhitelist={[
-          '*',
-          'http://*',
-          'https://*',
-          'intent://*',
-          'tel:*',
-          'mailto:*',
-        ]}
-        onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-        onNavigationStateChange={handleNavigationStateChange}
-        source={{
-          uri: product,
-        }}
-        // Умова: додаємо onOpenWindow тільки якщо enableOnOpenWindow === true
-        {...(enableOnOpenWindow ? {onOpenWindow: onOpenWindow} : {})}
-        onError={syntheticEvent => {
-          const {nativeEvent} = syntheticEvent;
-          const url = nativeEvent.url;
-          console.warn('WebView error url ', nativeEvent.url);
-          // Якщо це специфічний URL, ігноруємо помилку
-          if (url.startsWith('bncmobile://')) {
-            return;
-          }
+            <WebView
+                originWhitelist={[
+                    '*',
+                    'http://*',
+                    'https://*',
+                    'intent://*',
+                    'tel:*',
+                    'mailto:*',
+                ]}
+                onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+                onNavigationStateChange={handleNavigationStateChange}
+                source={{
+                    uri: product,
+                }}
+                // Умова: додаємо onOpenWindow тільки якщо enableOnOpenWindow === true
+                {...(enableOnOpenWindow ? { onOpenWindow: onOpenWindow } : {})}
+                onError={syntheticEvent => {
+                    const { nativeEvent } = syntheticEvent;
+                    const url = nativeEvent.url;
+                    console.warn('WebView error url ', nativeEvent.url);
+                    // Якщо це специфічний URL, ігноруємо помилку
+                    if (url.startsWith('bncmobile://')) {
+                        return;
+                    } 
 
-          //Alert.alert('Error', `Failed to load URL: ${url}`, [{text: 'OK'}]);
-        }}
-        //sharedCookiesEnabled={true}
-        textZoom={100}
-        allowsBackForwardNavigationGestures={true}
-        domStorageEnabled={true}
-        javaScriptEnabled={true}
-        allowsInlineMediaPlayback={true}
-        setSupportMultipleWindows={true}
-        mediaPlaybackRequiresUserAction={false}
-        allowFileAccess={true}
-        javaScriptCanOpenWindowsAutomatically={true}
-        style={{flex: 1}}
-        ref={refWebview}
-        userAgent={customUserAgent}
-        //userAgent={`Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`}
-        onLoadStart={handleLoadingStart} // Викликається при початку завантаження
-        onLoadEnd={handleLoadingEnd} // Викликається при завершенні завантаження
-        startInLoadingState={true}
-        renderLoading={() => <LoadingIndicatorView />}
-      />
+                    //Alert.alert('Error', `Failed to load URL: ${url}`, [{text: 'OK'}]);
+                }}
+                //sharedCookiesEnabled={true}
+                textZoom={100}
+                allowsBackForwardNavigationGestures={true}
+                domStorageEnabled={true}
+                javaScriptEnabled={true}
+                allowsInlineMediaPlayback={true}
+                setSupportMultipleWindows={true}
+                mediaPlaybackRequiresUserAction={false}
+                allowFileAccess={true}
+                javaScriptCanOpenWindowsAutomatically={true}
+                style={{ flex: 1 }}
+                ref={refWebview}
+                userAgent={customUserAgent}
+                //userAgent={`Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`}
+                onLoadStart={handleLoadingStart} // Викликається при початку завантаження
+                onLoadEnd={handleLoadingEnd} // Викликається при завершенні завантаження
+                startInLoadingState={true}
+                renderLoading={() => <LoadingIndicatorView />}
+            />
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginBottom: -20,
-          paddingTop: 10,
-        }}>
-        {/**Btn back */}
-        <TouchableOpacity
-          style={{marginLeft: 40}}
-          onPress={() => {
-            goBackBtn();
-          }}>
-          <Image
-            style={{width: 30, height: 33}}
-            source={require('../assets/icons/arrow77.png')}
-          />
-        </TouchableOpacity>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginBottom: -20,
+                    paddingTop: 10,
+                }}>
+                {/**Btn back */}
+                <TouchableOpacity
+                    style={{ marginLeft: 40 }}
+                    onPress={() => {
+                        goBackBtn();
+                    }}>
+                    <Image
+                        style={{ width: 30, height: 33 }}
+                        source={require('../assets/icons/arrow77.png')}
+                    />
+                </TouchableOpacity>
 
-        {/**Btn reload */}
-        <TouchableOpacity
-          style={{marginRight: 40}}
-          onPress={() => {
-            reloadPageBtn();
-          }}>
-          <Image
-            style={{width: 30, height: 30}}
-            source={require('../assets/icons/redo77.png')}
-          />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
+                {/**Btn reload */}
+                <TouchableOpacity
+                    style={{ marginRight: 40 }}
+                    onPress={() => {
+                        reloadPageBtn();
+                    }}>
+                    <Image
+                        style={{ width: 30, height: 30 }}
+                        source={require('../assets/icons/redo77.png')}
+                    />
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    );
 };
 
 export default ProductScreen;
