@@ -89,18 +89,18 @@ const PlaceLogRoutes = () => {
     };
 
     fetchData();
-  }, []); ///
+  }, []); ///&& isInstallConversionDone, isInstallConversionDone
 
   useEffect(() => {
     const finalizeProcess = async () => {
-      if (isDataReady && isInstallConversionDone) {
+      if (isDataReady) {
         await generateLink(); // Викликати generateLink, коли всі дані готові
         console.log('Фінальна лінка сформована!');
       }
     };
 
     finalizeProcess();
-  }, [isDataReady, isInstallConversionDone]);
+  }, [isDataReady]);
 
   // uniq_visit
   const checkUniqVisit = async () => {
